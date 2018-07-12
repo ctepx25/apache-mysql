@@ -1,0 +1,39 @@
+version: '3.0'
+services:
+  mysql:
+    image: mysql:5.5
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=redhat
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data:/usr/local/mysql/data/
+    ports:
+      - 3306:3306
+    networks:
+      - apache-net
+
+  apache:
+    image: httpd
+    container_name: apache
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - apache-net
+
+volumes:
+  data:
+    driver: local
+  htdocs:
+    driver: local
+
+networks:
+  apache-net:
